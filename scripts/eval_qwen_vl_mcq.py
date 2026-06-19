@@ -14,13 +14,14 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="Print prompts without loading the model.")
     args = parser.parse_args()
 
-    items = _load_items(args.input, args.max_items)
-    prompts = [_format_prompt(item) for item in items]
+    items = _load_items(args.input, None if args.dry_run else args.max_items)
     if args.dry_run:
-        for prompt in prompts[:5]:
-            print(prompt)
+        display_items = _select_dry_run_items(items, args.max_items or 5)
+        for item in display_items:
+            print(_format_prompt(item))
             print()
-        print(f"dry_run_items={len(items)}")
+        print(f"dry_run_items={len(display_items)}")
+        print(f"total_items={len(items)}")
         return
 
     raise SystemExit(
@@ -38,6 +39,30 @@ def _load_items(path: Path, max_items: int | None) -> list[dict]:
                 if max_items is not None and len(items) >= max_items:
                     break
     return items
+
+
+def _select_dry_run_items(items: list[dict], max_items: int) -> list[dict]:
+    if max_items <= 0:
+        return []
+
+    grouped: dict[str, list[dict]] = {}
+    for item in items:
+        provenance = item.get("provenance", {})
+        group = str(provenance.get("task_name") or item.get("episode_uid") or "items")
+        grouped.setdefault(group, []).append(item)
+
+    selected: list[dict] = []
+    while len(selected) < max_items:
+        added = False
+        for group in sorted(grouped):
+            if grouped[group]:
+                selected.append(grouped[group].pop(0))
+                added = True
+                if len(selected) >= max_items:
+                    break
+        if not added:
+            break
+    return selected
 
 
 def _format_prompt(item: dict) -> str:

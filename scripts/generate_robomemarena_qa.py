@@ -21,10 +21,20 @@ def main() -> None:
     parser.add_argument("--max-episodes", type=int, default=None)
     parser.add_argument("--families", default=None, help="Comma-separated question families to generate.")
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--episode-strategy",
+        choices=["sorted", "round-robin-tasks"],
+        default="sorted",
+        help="How to choose episodes when --max-episodes is set.",
+    )
     args = parser.parse_args()
 
     if args.max_episodes is not None:
-        subtasks = scan_episode_subtasks(args.root, max_episodes=args.max_episodes)
+        subtasks = scan_episode_subtasks(
+            args.root,
+            max_episodes=args.max_episodes,
+            episode_strategy=args.episode_strategy.replace("-", "_"),
+        )
     else:
         subtasks = scan_subtasks(args.root, limit_files=args.limit_files)
     families = set(args.families.split(",")) if args.families else None

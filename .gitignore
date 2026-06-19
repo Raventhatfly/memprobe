@@ -219,3 +219,10 @@ __marimo__/
 
 # Intermediate Output
 outputs/
+# Local data and generated MemProbe outputs
+data
+data/
+datasets
+datasets/
+outputs
+design_docs

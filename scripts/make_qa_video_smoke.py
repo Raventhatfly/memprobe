@@ -20,6 +20,12 @@ def main() -> None:
     parser.add_argument("--dataset", default="/data/demo_0/obs/agentview_rgb")
     parser.add_argument("--fps", type=int, default=20)
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--episode-strategy",
+        choices=["sorted", "round-robin-tasks"],
+        default="sorted",
+        help="How to choose episodes when generating QA.",
+    )
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -30,7 +36,11 @@ def main() -> None:
         subtasks = []
         items = _load_jsonl(args.rewritten_qa)[: args.max_qa]
     else:
-        subtasks = scan_episode_subtasks(args.root, max_episodes=args.max_episodes)
+        subtasks = scan_episode_subtasks(
+            args.root,
+            max_episodes=args.max_episodes,
+            episode_strategy=args.episode_strategy.replace("-", "_"),
+        )
         families = set(args.families.split(",")) if args.families else None
         items = generate_qa_items(subtasks, families=families)[: args.max_qa]
 

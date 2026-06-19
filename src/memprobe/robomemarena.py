@@ -45,7 +45,11 @@ def scan_subtasks(root: Path = DEFAULT_ROBOMEMARENA_ROOT, limit_files: int | Non
     return out
 
 
-def scan_episode_subtasks(root: Path = DEFAULT_ROBOMEMARENA_ROOT, max_episodes: int | None = None) -> list[Subtask]:
+def scan_episode_subtasks(
+    root: Path = DEFAULT_ROBOMEMARENA_ROOT,
+    max_episodes: int | None = None,
+    episode_strategy: str = "sorted",
+) -> list[Subtask]:
     """Scan complete RoboMemArena seed/task episodes instead of a file-prefix sample."""
     files_by_episode: dict[tuple[str, str, str, str], list[Path]] = {}
     for path in iter_hdf5_files(root):
@@ -55,15 +59,47 @@ def scan_episode_subtasks(root: Path = DEFAULT_ROBOMEMARENA_ROOT, max_episodes: 
         key = (str(parsed["suite"]), str(parsed["task_name"]), str(parsed["seed"]), str(parsed["task_id"]))
         files_by_episode.setdefault(key, []).append(path)
 
+    selected_keys = _select_episode_keys(files_by_episode, max_episodes, episode_strategy)
     out: list[Subtask] = []
-    for _, paths in sorted(files_by_episode.items())[:max_episodes]:
-        for path in sorted(paths):
+    for key in selected_keys:
+        for path in sorted(files_by_episode[key]):
             parsed = parse_subtask_path(path, root)
             if not parsed:
                 continue
             metadata = read_demo_metadata(path)
             out.append(Subtask(path=path, metadata=metadata, **parsed))
     return out
+
+
+def _select_episode_keys(
+    files_by_episode: dict[tuple[str, str, str, str], list[Path]],
+    max_episodes: int | None,
+    episode_strategy: str,
+) -> list[tuple[str, str, str, str]]:
+    all_keys = sorted(files_by_episode)
+    if max_episodes is None:
+        return all_keys
+    if episode_strategy == "sorted":
+        return all_keys[:max_episodes]
+    if episode_strategy != "round_robin_tasks":
+        raise ValueError(f"unknown episode_strategy: {episode_strategy}")
+
+    by_task: dict[tuple[str, str], list[tuple[str, str, str, str]]] = {}
+    for key in all_keys:
+        by_task.setdefault((key[0], key[1]), []).append(key)
+
+    selected: list[tuple[str, str, str, str]] = []
+    while len(selected) < max_episodes:
+        added = False
+        for task_key in sorted(by_task):
+            if by_task[task_key]:
+                selected.append(by_task[task_key].pop(0))
+                added = True
+                if len(selected) >= max_episodes:
+                    break
+        if not added:
+            break
+    return selected
 
 
 def parse_subtask_path(path: Path, root: Path) -> dict[str, object] | None:
