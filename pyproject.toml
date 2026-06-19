@@ -1,20 +1,27 @@
 [project]
 name = "memprobe"
 version = "0.1.0"
-description = "Prototype MemProbe QA generation and VLM evaluation utilities."
+description = "Dataset-independent visual episodic memory probe generation."
 requires-python = ">=3.9"
 dependencies = [
-  "h5py>=3.8",
+  "imageio-ffmpeg>=0.5",
   "numpy>=1.23",
 ]
+
+[project.scripts]
+memprobe = "memprobe.cli:main"
 
 [project.optional-dependencies]
 qwen = [
   "accelerate",
   "pillow",
-  "qwen-vl-utils",
+  "qwen-vl-utils>=0.0.14",
   "torch",
-  "transformers>=4.49.0",
+  "transformers>=4.57.1",
+]
+
+dev = [
+  "pytest>=8",
 ]
 
 [tool.setuptools.packages.find]

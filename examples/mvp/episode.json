@@ -1,0 +1,33 @@
+{
+  "schema_version": "memprobe.v1",
+  "episode_uid": "synthetic_episode_001",
+  "duration_s": 16.0,
+  "streams": [
+    {
+      "camera_id": "cam_0",
+      "uri": "synthetic_episode_001.mp4",
+      "duration_s": 16.0,
+      "fps": 30.0,
+      "width": 640,
+      "height": 480
+    }
+  ],
+  "signals": [
+    {
+      "name": "gripper_state",
+      "timestamps_s": [0.0, 1.2, 2.2, 3.2, 4.2, 5.2, 6.2, 7.2, 8.2, 10.2, 11.2, 13.2, 14.2],
+      "values": [0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0]
+    },
+    {
+      "name": "motion_score",
+      "timestamps_s": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0],
+      "values": [0.0, 0.8, 0.0, 0.7, 0.0, 0.9, 0.0, 0.8, 0.0, 0.0, 0.9, 0.0, 0.0, 0.7, 0.0, 0.0]
+    }
+  ],
+  "private_metadata": {
+    "fixture": true
+  },
+  "source_provenance": {
+    "dataset": "synthetic"
+  }
+}

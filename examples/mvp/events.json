@@ -1,0 +1,76 @@
+{
+  "events": [
+    {
+      "event_id": "evt_01",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 1.0,
+      "peak_s": 1.5,
+      "end_s": 2.0,
+      "event_type": "gripper_close",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    },
+    {
+      "event_id": "evt_02",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 3.0,
+      "peak_s": 3.5,
+      "end_s": 4.0,
+      "event_type": "gripper_open",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    },
+    {
+      "event_id": "evt_03",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 5.0,
+      "peak_s": 5.5,
+      "end_s": 6.0,
+      "event_type": "gripper_close",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    },
+    {
+      "event_id": "evt_04",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 7.0,
+      "peak_s": 7.5,
+      "end_s": 8.0,
+      "event_type": "gripper_open",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    },
+    {
+      "event_id": "evt_05",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 10.0,
+      "peak_s": 10.5,
+      "end_s": 11.0,
+      "event_type": "gripper_close",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    },
+    {
+      "event_id": "evt_06",
+      "episode_uid": "synthetic_episode_001",
+      "camera_id": "cam_0",
+      "start_s": 13.0,
+      "peak_s": 13.5,
+      "end_s": 14.0,
+      "event_type": "gripper_open",
+      "confidence": 0.99,
+      "source": "fixture",
+      "verification_status": "verified"
+    }
+  ]
+}
